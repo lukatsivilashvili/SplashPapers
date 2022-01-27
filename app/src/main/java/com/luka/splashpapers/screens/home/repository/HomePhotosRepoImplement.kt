@@ -1,12 +1,12 @@
 package com.luka.splashpapers.screens.home.repository
 
 import com.luka.splashpapers.misc.NetworkHandler
-import com.luka.splashpapers.screens.home.models.HomePaginatedModel
+import com.luka.splashpapers.screens.home.models.HomePaginatedModelItem
 import com.luka.splashpapers.screens.home.service.RecentPhotosService
 import javax.inject.Inject
 
-class RecentPhotosRepoImplement @Inject constructor(private val recentPhotosService: RecentPhotosService) : RecentPhotosRepo{
-    override suspend fun getRecentPhotos(): NetworkHandler<HomePaginatedModel> =
+class HomePhotosRepoImplement @Inject constructor(private val recentPhotosService: RecentPhotosService) : HomePhotosRepo{
+    override suspend fun getRecentPhotos(): NetworkHandler<List<HomePaginatedModelItem>> =
         try {
             val result = recentPhotosService.getRecentPhotos()
             if (result.isSuccessful){

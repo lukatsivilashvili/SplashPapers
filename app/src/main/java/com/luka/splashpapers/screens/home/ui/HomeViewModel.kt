@@ -1,36 +1,51 @@
 package com.luka.splashpapers.screens.home.ui
 
-import android.util.Log.d
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.luka.splashpapers.screens.home.models.HomePaginatedModel
-import com.luka.splashpapers.screens.home.repository.RecentPhotosRepoImplement
+import com.luka.splashpapers.screens.home.models.HomeModelFace
+import com.luka.splashpapers.screens.home.models.HomePaginatedModelItem
+import com.luka.splashpapers.screens.home.repository.HomePhotosRepoImplement
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val recentPhotosRepoImplement: RecentPhotosRepoImplement) : ViewModel() {
+class HomeViewModel @Inject constructor(private val recentPhotosRepoImplement: HomePhotosRepoImplement) :
+    ViewModel() {
 
-    private val photosLiveData = MutableLiveData<HomePaginatedModel>()
-    val _photosLiveData: LiveData<HomePaginatedModel> = photosLiveData
+    private val photosLiveData = MutableLiveData<List<HomeModelFace>>()
+    val _photosLiveData: LiveData<List<HomeModelFace>> = photosLiveData
 
-    fun init(){
+    private val loadingLiveData = MutableLiveData<Boolean>()
+    val _loadingLiveData:LiveData<Boolean> = loadingLiveData.apply {
+        true
+    }
+
+    fun init() {
         CoroutineScope(Dispatchers.IO).launch {
             obtainRecentPhotos()
         }
     }
 
-    private suspend fun obtainRecentPhotos(){
+    private suspend fun obtainRecentPhotos() {
+        loadingLiveData.postValue(true)
         val photos = recentPhotosRepoImplement.getRecentPhotos()
         val items = photos.data
-        photosLiveData.postValue(items!!)
-        delay(2000)
-        d("myLog", _photosLiveData.value.toString())
+        val fin = transformToFace(items)
+        photosLiveData.postValue(fin!!)
+        loadingLiveData.postValue(false)
+    }
+
+    private fun transformToFace(homePaginatedModelItems: List<HomePaginatedModelItem>?): List<HomeModelFace>? {
+        return homePaginatedModelItems?.map { HomePaginatedModelItem ->
+            HomeModelFace(
+                urls = HomePaginatedModelItem.urls,
+                likes = HomePaginatedModelItem.likes
+            )
+        }
     }
 
 }
