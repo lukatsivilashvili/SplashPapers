@@ -4,5 +4,5 @@ import com.luka.splashpapers.misc.NetworkHandler
 import com.luka.splashpapers.screens.home.models.HomePaginatedModelItem
 
 interface HomePhotosRepo {
-    suspend fun getRecentPhotos(): NetworkHandler<List<HomePaginatedModelItem>>
+    suspend fun getRecentPhotos(page:Int): NetworkHandler<List<HomePaginatedModelItem>>
 }

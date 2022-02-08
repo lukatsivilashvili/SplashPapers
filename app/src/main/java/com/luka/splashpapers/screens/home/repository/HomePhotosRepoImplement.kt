@@ -9,10 +9,10 @@ import javax.inject.Inject
 
 class HomePhotosRepoImplement @Inject constructor(private val recentPhotosService: RecentPhotosService) :
     HomePhotosRepo {
-    override suspend fun getRecentPhotos(): NetworkHandler<List<HomePaginatedModelItem>> {
+    override suspend fun getRecentPhotos(page:Int): NetworkHandler<List<HomePaginatedModelItem>> {
         return withContext(Dispatchers.IO) {
             try {
-                val result = recentPhotosService.getRecentPhotos()
+                val result = recentPhotosService.getRecentPhotos(page)
                 if (result.isSuccessful) {
                     NetworkHandler.Success(result.body()!!)
                 } else {

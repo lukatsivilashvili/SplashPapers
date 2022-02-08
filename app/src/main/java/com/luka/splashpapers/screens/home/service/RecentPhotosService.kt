@@ -10,7 +10,7 @@ interface RecentPhotosService {
 
     @GET("photos")
     suspend fun getRecentPhotos(
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int,
         @Query("order_by") order: String = "popular",
         @Query("client_id") clientId: String = API_KEY
     ): Response<List<HomePaginatedModelItem>>

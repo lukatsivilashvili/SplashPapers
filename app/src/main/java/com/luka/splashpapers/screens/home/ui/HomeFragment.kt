@@ -2,11 +2,14 @@ package com.luka.splashpapers.screens.home.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
-import com.luka.splashpapers.adapters.HomePhotosRecyclerAdapter
 import com.luka.splashpapers.base.BaseFragment
 import com.luka.splashpapers.databinding.HomeFragmentBinding
+import com.luka.splashpapers.screens.home.adapters.HomePhotosRecyclerAdapter
+import com.luka.splashpapers.utils.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,26 +30,32 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>(HomeFragmentBinding::infl
 
 
     private fun initRecycler() {
-        viewModel.obtainRecentPhotos()
-        myAdapter = HomePhotosRecyclerAdapter()
-        binding.recycler.layoutManager = GridLayoutManager(requireActivity(), 2)
-        binding.recycler.adapter = myAdapter
+        myAdapter = HomePhotosRecyclerAdapter(object : OnItemClickListener {
+            override fun clickItem(position: Int, id: String) {
+                Toast.makeText(requireContext(), id, Toast.LENGTH_SHORT).show()
+            }
+
+        })
+        binding.recycler.apply {
+            layoutManager = GridLayoutManager(requireContext(), 2)
+            setHasFixedSize(true)
+            adapter = myAdapter
+        }
     }
 
     private fun setObservers() {
-        viewModel._loadingLiveData.observe(viewLifecycleOwner) {
-            binding.refresh.isRefreshing = it
-        }
-
-        viewModel._photosLiveData.observe(viewLifecycleOwner) {
-            myAdapter.setData(it.toMutableList())
+        viewModel.photosList.observe(viewLifecycleOwner) {
+            myAdapter.submitData(lifecycle, it)
         }
     }
 
-    private fun setListeners(){
+    private fun setListeners() {
         binding.refresh.setOnRefreshListener {
-            myAdapter.clearData()
-            viewModel.obtainRecentPhotos()
+            myAdapter.refresh()
+        }
+
+        myAdapter.addLoadStateListener {
+            binding.refresh.isRefreshing = it.refresh is LoadState.Loading
         }
     }
 }
