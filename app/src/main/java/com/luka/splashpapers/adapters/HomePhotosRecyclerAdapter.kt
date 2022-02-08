@@ -18,7 +18,7 @@ class HomePhotosRecyclerAdapter() :
 
         fun bind(){
             model = photos[absoluteAdapterPosition]
-            binding.ivHome.loadImage(model.urls?.regular!!)
+            binding.ivHome.loadImage(model.urls?.regular!!, model.colors.toString())
             binding.tvLikes.text = model.likes.toString()
         }
     }

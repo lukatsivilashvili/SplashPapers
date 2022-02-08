@@ -20,30 +20,33 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>(HomeFragmentBinding::infl
     }
 
     private fun init() {
-        viewModel.init()
         initRecycler()
-        observe()
-
-        binding.refresh.setOnRefreshListener {
-            myAdapter.clearData()
-            viewModel.init()
-        }
+        setObservers()
+        setListeners()
     }
 
 
     private fun initRecycler() {
+        viewModel.obtainRecentPhotos()
         myAdapter = HomePhotosRecyclerAdapter()
         binding.recycler.layoutManager = GridLayoutManager(requireActivity(), 2)
         binding.recycler.adapter = myAdapter
     }
 
-    private fun observe() {
+    private fun setObservers() {
         viewModel._loadingLiveData.observe(viewLifecycleOwner) {
             binding.refresh.isRefreshing = it
         }
 
         viewModel._photosLiveData.observe(viewLifecycleOwner) {
             myAdapter.setData(it.toMutableList())
+        }
+    }
+
+    private fun setListeners(){
+        binding.refresh.setOnRefreshListener {
+            myAdapter.clearData()
+            viewModel.obtainRecentPhotos()
         }
     }
 }
