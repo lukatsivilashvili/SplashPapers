@@ -22,23 +22,11 @@
             app:layout_constraintDimensionRatio="2:3"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toTopOf="@id/tvLikes"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_launcher_foreground" />
-
-        <TextView
-            android:id="@+id/tvLikes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

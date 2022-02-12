@@ -16,7 +16,7 @@ class HomeViewModel @Inject constructor(
     private val recentPhotosRepoImplement: HomePhotosRepoImplement
 ) : ViewModel() {
 
-    val photosList = Pager(PagingConfig(pageSize = 10)) {
+    val photosList = Pager(PagingConfig(pageSize = 40)) {
         HomePhotosPagingDataSource(recentPhotosRepoImplement)
     }.liveData.cachedIn(viewModelScope)
 }

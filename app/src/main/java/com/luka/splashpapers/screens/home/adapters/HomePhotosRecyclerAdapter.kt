@@ -27,7 +27,6 @@ class HomePhotosRecyclerAdapter(
 
             val photo = getItem(absoluteAdapterPosition)
             binding.ivHome.loadImage(photo?.urls?.regular!!, photo.color!!)
-            binding.tvLikes.text = photo.likes.toString()
             binding.root.setOnClickListener(this)
 
         }

@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.luka.splashpapers.base.BaseFragment
 import com.luka.splashpapers.databinding.HomeFragmentBinding
@@ -52,10 +51,12 @@ class HomeFragment : BaseFragment<HomeFragmentBinding>(HomeFragmentBinding::infl
     private fun setListeners() {
         binding.refresh.setOnRefreshListener {
             myAdapter.refresh()
+            binding.refresh.isRefreshing = false
         }
 
-        myAdapter.addLoadStateListener {
-            binding.refresh.isRefreshing = it.refresh is LoadState.Loading
+        binding.fabScrollToTop.setOnClickListener {
+            binding.recycler.layoutManager?.scrollToPosition(0)
         }
+
     }
 }
